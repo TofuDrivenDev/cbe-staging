@@ -69,10 +69,10 @@ jobs:
       #     restore-keys: |
       #       ${{ runner.os }}-node-
 
-      - name: Install Next.js dependencies
-        # Use a working directory to run commands for the Next.js app
-        working-directory: ./appComposeByExample/web
-        run: npm ci
+      # - name: Install Next.js dependencies
+      #   # Use a working directory to run commands for the Next.js app
+      #   working-directory: ./appComposeByExample/web
+      #   run: npm ci
 
       - name: Build Next.js project for static export
         working-directory: ./appComposeByExample/web
