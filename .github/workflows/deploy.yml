@@ -59,7 +59,7 @@ jobs:
           mkdir -p appComposeByExample/web/public/wasm
 
       - name: Copy Wasm build output to Next.js public folder
-        run: cp appSandbox/build/dist/wasmJs/productionExecutable/*.js appSandbox/build/dist/wasmJs/productionExecutable/*.wasm appComposeByExample/web/public/wasm/
+        run: cp ./appSandbox/build/dist/wasmJs/productionExecutable/*.js ./appSandbox/build/dist/wasmJs/productionExecutable/*.wasm ./appComposeByExample/web/public/wasm/
 
       # - name: Setup Node.js Cache
       #   uses: actions/cache@v4
