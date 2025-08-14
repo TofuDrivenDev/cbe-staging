@@ -44,11 +44,8 @@ jobs:
         with:
           gradle-version: 8.12.1
 
-      - name: Make Gradle wrapper executable
-        run: chmod +x ./gradlew
-
       - name: Build Kotlin/Wasm Distribution
-        run: ./gradlew :appSandbox:wasmJsBrowserDistribution -DGITHUB_PAT=${{ github.token }}
+        run: gradle :appSandbox:wasmJsBrowserDistribution -DGITHUB_PAT=${{ github.token }}
         
       # # --- NEXT.JS BUILD STEPS ---
       # - name: Set up Node.js
