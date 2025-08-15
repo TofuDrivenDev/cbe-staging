@@ -76,9 +76,7 @@ jobs:
 
       - name: Build Next.js project for static export
         working-directory: ./appComposeByExample/web
-        run: npm run build
-        env:
-          GH_PAGES_BASE_PATH: ${{ env.GH_PAGES_BASE_PATH }}
+        run: GH_PAGES_BASE_PATH=${{ env.GH_PAGES_BASE_PATH }} npm run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
