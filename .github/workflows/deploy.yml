@@ -45,7 +45,7 @@ jobs:
           gradle-version: 8.12.1
 
       - name: Build Kotlin/Wasm Distribution
-        run: gradle :appSandbox:wasmJsBrowserDistribution -DGITHUB_PAT=${{ github.token }}
+        run: gradle :appComposeByExample:wasmJsBrowserDistribution -DGITHUB_PAT=${{ github.token }}
         
       # # --- NEXT.JS BUILD STEPS ---
       # - name: Set up Node.js
@@ -59,7 +59,7 @@ jobs:
           mkdir -p appComposeByExample/web/public/wasm
 
       - name: Copy Wasm build output to Next.js public folder
-        run: cp ./appSandbox/build/dist/wasmJs/productionExecutable/*.js ./appSandbox/build/dist/wasmJs/productionExecutable/*.wasm ./appComposeByExample/web/public/wasm/
+        run: cp ./appComposeByExample/build/dist/wasmJs/productionExecutable/*.js ./appComposeByExample/build/dist/wasmJs/productionExecutable/*.wasm ./appComposeByExample/web/public/wasm/
 
       # - name: Setup Node.js Cache
       #   uses: actions/cache@v4
