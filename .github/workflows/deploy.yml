@@ -1,8 +1,8 @@
 name: Build KMP Wasm and Deploy Next.js to Pages
+run-name: "Triggered by ${{ inputs.commit_hash }}"
 
-# Controls when the workflow will run
+
 on:
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
       commit_hash:
@@ -13,10 +13,12 @@ on:
         type: string
         default: 'refs/heads/main'
 
+
 permissions:
   contents: read  # Required to fetch the repository content
   pages: write    # Allow deployment to GitHub Pages
   id-token: write # Required by actions/configure-pages
+
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
