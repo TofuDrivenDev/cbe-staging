@@ -1,5 +1,5 @@
 name: "🚀 Deploy Pages"
-run-name: "Triggered by ${{ inputs.commit_hash }}"
+run-name: "${{ inputs.ref }} #${{ inputs.commit_hash }}"
 
 
 on:
