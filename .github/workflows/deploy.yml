@@ -1,4 +1,4 @@
-name: Build KMP Wasm and Deploy Next.js to Pages
+name: "🚀 Deploy Pages"
 run-name: "Triggered by ${{ inputs.commit_hash }}"
 
 
