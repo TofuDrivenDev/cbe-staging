@@ -15,85 +15,65 @@ on:
 
 
 permissions:
-  contents: read  # Required to fetch the repository content
-  pages: write    # Allow deployment to GitHub Pages
-  id-token: write # Required by actions/configure-pages
+  contents: read
+  pages: write
+  id-token: write
 
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This job builds the Kotlin and Next.js projects and prepares the artifact for deployment
   build:
     runs-on: ubuntu-latest
-
     steps:
-      # Step 1: Checkout your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Checkout repository
+      - name: "📥 Checkout Code"
         uses: actions/checkout@v4
         with:
           repository: TofuDrivenDev/kmp-monorepo
           ref: ${{ inputs.ref }}
           token: ${{ secrets.KMP_MONOREPO_PAT }}
 
-
-      # --- KOTLIN/WASM BUILD STEPS ---
-      - name: Set up JDK 21
+      - name: "⚙️ Setup JDK"
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
           distribution: 'temurin'
-          
-      # 3. Set up Gradle
+          java-version: '21'
+      
       - name: "⚙️ Setup Gradle"
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: 8.12.1
 
-      - name: Build Kotlin/Wasm Distribution
+      - name: "🛠️ Build Wasm Binaries"
         run: gradle :appComposeByExample:wasmJsBrowserDistribution -DGITHUB_PAT=${{ github.token }}
         
-      # # --- NEXT.JS BUILD STEPS ---
-      # - name: Set up Node.js
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     node-version: 20
-
-      - name: Clean and recreate Wasm directory
+      - name: "📋 Move Wasm Binaries"
+        env:
+          WASM_FROM: ./appComposeByExample/build/dist/wasmJs/productionExecutable
+          WASM_TO: ./appComposeByExample/web/public/wasm
         run: |
-          rm -rf appComposeByExample/web/public/wasm
-          mkdir -p appComposeByExample/web/public/wasm
+          rm -rf ${{ env.WASM_TO }}
+          mkdir -p ${{ env.WASM_TO }}
+          cp ${{ env.WASM_FROM }}/*.js \
+             ${{ env.WASM_FROM }}/*.js.map \
+             ${{ env.WASM_FROM }}/*.wasm \
+             ${{ env.WASM_TO }}
 
-      - name: Copy Wasm build output to Next.js public folder
-        run: cp ./appComposeByExample/build/dist/wasmJs/productionExecutable/*.js ./appComposeByExample/build/dist/wasmJs/productionExecutable/*.js.map ./appComposeByExample/build/dist/wasmJs/productionExecutable/*.wasm ./appComposeByExample/web/public/wasm/
-
-      # - name: Setup Node.js Cache
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: ~/.npm
-      #     key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-node-
-
-      - name: Install Next.js dependencies
-        # Use a working directory to run commands for the Next.js app
+      - name: "⚙️ Setup NPM"
         working-directory: ./appComposeByExample/web
         run: npm ci
 
-      - name: Build Next.js project for static export
+      - name: "🛠️ Build Next.js App"
         working-directory: ./appComposeByExample/web
-        run: GH_PAGES_BASE_PATH=${{ vars.GH_PAGES_BASE_PATH }} npm run build
+        run: npm run build
 
-      - name: Setup Pages
+      - name: "⚙️ Setup Pages"
         uses: actions/configure-pages@v5
 
-      - name: Upload artifact for GitHub Pages
+      - name: "📤 Upload Artifact to Pages"
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload the static output from the Next.js build
           path: ./appComposeByExample/web/out
 
-      # 7. Deploy to GitHub Pages
-      - name: "🚀 Deploy to GitHub Pages"
+      - name: "🚀 Deploy Pages"
         id: deployment
         uses: actions/deploy-pages@v4
         
