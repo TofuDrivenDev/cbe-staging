@@ -11,7 +11,7 @@ on:
       ref:
         required: true
         type: string
-        default: 'refs/heads/main'
+        default: 'refs/heads/dev'
 
 
 permissions:
